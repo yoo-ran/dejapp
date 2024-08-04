@@ -17,6 +17,7 @@ import Home from './screens/Home';
 import Search from './screens/Search';
 import Onboarding from './screens/Onboarding';
 import Detail from './screens/Detail';
+import Like from './screens/Like';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,13 +36,16 @@ function TabNavigator({navigation}) {
 
           switch (route.name) {
             case 'Home':
-              iconName = 'home'; // Replace with your icon name
+              iconName = 'home';  
               break;
             case 'Search':
-              iconName = 'search'; // Replace with your icon name
+              iconName = 'search';  
               break;
             case 'Detail':
-              iconName = 'document-text-outline'; // Replace with your icon name
+              iconName = 'document-text-outline';  
+              break;
+            case 'Like':
+              iconName = 'heart'; 
               break;
           }
           const iconColor = focused ? '#00495F' : color;
@@ -76,6 +80,11 @@ function TabNavigator({navigation}) {
             />
           ),
         }}  
+      />
+      <Tab.Screen
+        name="Like"
+        component={Like}
+        options={{ headerShown: false }}      
       />
     </Tab.Navigator>
   );

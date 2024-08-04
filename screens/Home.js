@@ -51,20 +51,21 @@ export default function Home({ navigation }) {
   };
 
   const filterBtn = [
-    { type: "Houses", icon: "home-outline" },
+    { type: "House", icon: "home-outline" },
     { type: "Apartment", icon: "business-outline" },
     { type: "Villa", icon: "laptop-outline" },
   ];
 
-  const filterPress = (e) => {
-    let filterText = e.target
-    let filtered = data.filter(item => item.title.toLowerCase().includes(text.toLowerCase()));
+  const filterPress = (type) => {
+    let filtered = data.filter(item => item.category.toLowerCase().includes(type.toLowerCase()));
+    setFilteredData(filtered);
 
   }
 
   const filterItem = ({ item }) => (
     <CardItem properties={item} navigatorRef={navigation} />
   );
+
   const saleItem = ({ item }) => (
     <SaleCardItem properties={item} navigatorRef={navigation} />
   );
@@ -135,7 +136,7 @@ export default function Home({ navigation }) {
                   color: "#00495F"
                 }}
                 iconPosition='left'
-                onPress={() => navigation.navigate('Main')}
+                onPress={()=> filterPress(btn.type)}
               />
             ))}
           </View>
