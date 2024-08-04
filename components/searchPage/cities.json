@@ -1,0 +1,43 @@
+[
+    {
+      "id": "1",
+      "name": "New York",
+      "img": "https://images.pexels.com/photos/290386/pexels-photo-290386.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": "2",
+      "name": "Boston",
+      "img": "https://images.pexels.com/photos/10320082/pexels-photo-10320082.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": "3",
+      "name": "Los Angeles",
+      "img": "https://images.pexels.com/photos/2695679/pexels-photo-2695679.jpeg?auto=compress&cs=tinysrgb&w=600"
+    },
+    {
+      "id": "4",
+      "name": "San Francisco",
+      "img": "https://images.pexels.com/photos/208745/pexels-photo-208745.jpeg?auto=compress&cs=tinysrgb&w=600"
+    },
+    {
+      "id": "5",
+      "name": "Chicago",
+      "img": "https://images.pexels.com/photos/1823681/pexels-photo-1823681.jpeg?auto=compress&cs=tinysrgb&w=600"
+    },
+    {
+      "id": "6",
+      "name": "Austin",
+      "img": "https://images.pexels.com/photos/18583618/pexels-photo-18583618/free-photo-of-bridges-by-the-river-in-austin.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": "7",
+      "name": "Miami",
+      "img": "https://images.pexels.com/photos/6088368/pexels-photo-6088368.jpeg?auto=compress&cs=tinysrgb&w=600"
+    },
+    {
+      "id": "8",
+      "name": "Nashville",
+      "img": "https://images.pexels.com/photos/17715307/pexels-photo-17715307/free-photo-of-a-city-skyline-is-reflected-in-the-water.jpeg?auto=compress&cs=tinysrgb&w=600"
+    }
+  ]
+  
