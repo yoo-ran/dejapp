@@ -1,166 +1,209 @@
-import React,{useRef} from 'react';
-import { View, Image, StyleSheet } from 'react-native';
-import { Button, Text } from "@rneui/themed"
+import React, { useState, useRef } from 'react';
+import { View, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, ScrollView } from 'react-native';
+import { Button, Text } from "@rneui/themed";
 import { Avatar } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons'; 
 import { colors } from '../themes/Theme';
 import { basicTheme } from '../themes/basicThemes';
-
 import Carousel from 'react-native-anchor-carousel';
 
+const { width } = Dimensions.get('window');
 
-const DetailComponent = ({ currProperty, navigatorRef }) => {
+const DetailComponent = ({ currProperty }) => {
     const amenitiesArray = Object.entries(currProperty.amenity);
-
+    const [activeIndex, setActiveIndex] = useState(0);
     const carouselRef = useRef(null);
-    let initIndex = 1
 
+    const handleScrollEnd = (item, index) => {
+        setActiveIndex(index);
+    };
 
-    const renderItem = ({ item, index }) => (
-        <TouchableOpacity
-          activeOpacity={.7}
-        //   style={[styles.caroItem]}
-    
-        //   onPress={() => {
-        //     carouselRef.current.scrollToIndex(index);
-        //   }}
-          >
-          <Image
-            // style={styles.caroImage}
-            source={{ uri: "https://images.pexels.com/photos/2043035/pexels-photo-2043035.jpeg?auto=compress&cs=tinysrgb&w=800" }}
-          />
-        </TouchableOpacity>
-      );
+    const scrollToIndex = (index) => {
+        carouselRef.current.scrollToIndex(index);
+        setActiveIndex(index);
+    };
 
-  return (
-    <View style={styles.container}>
-        <Carousel
-            style={styles.carousel}
-            data={currProperty}
-            renderItem={renderItem}
-            initialIndex={initIndex}
-
-            // itemWidth={windowWidth * 0.7}
-            inActiveScale={0.6}
-            separatorWidth={15}
-            // containerWidth={windowWidth}
-
-            inActiveOpacity={0.3}
-
-            ref={carouselRef}
-        />
-        <View style={styles.box}>
-            <View style={styles.col}>
-                <Text h2 style={styles.title}>{currProperty.name}</Text>
-                <View style={styles.flexRow}>
-                    <FontAwesome name="map-marker" size={20} color={colors.primary.normal} />
-                    <Text style={{color:colors.base.dark, width:"90%"}}>{currProperty.address}</Text>
-                </View>
+    const renderItem = ({ item }) => {
+        return (
+            <View style={styles.itemContainer}>
+                <ImageBackground
+                    source={{ uri: item }}
+                    style={styles.imageBackground}
+                    imageStyle={styles.image}
+                />
             </View>
-            <View>
-                <Text h2 style={styles.title}>Feautures:</Text>
-                <View style={styles.flexRow}>
-                    {amenitiesArray.map(([key, value]) => (
-                        <View key={key} style={styles.flexCol}>
-                            <Avatar
-                                size="medium"
-                                rounded
-                                source={{ uri: "https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-house-icon-png-image_695369.jpg" }}
-                                containerStyle={styles.avatar}
-                            />
-                            <Text style={styles.amenityText}>{value} {key}</Text>
+        );
+    };
+
+    return (
+        <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+            <View style={styles.container}>
+                <View style={styles.flexCol}>
+                    <Carousel
+                        ref={carouselRef}
+                        data={currProperty.carousel}
+                        renderItem={renderItem}
+                        itemWidth={width * 0.9}
+                        containerWidth={width * 0.9}
+                        separatorWidth={10}
+                        pagingEnabled={true}
+                        onScrollEnd={handleScrollEnd}
+                    />
+                    <View style={styles.paginationContainer}>
+                        {currProperty.carousel.map((_, index) => (
+                            <TouchableOpacity key={index} onPress={() => scrollToIndex(index)}>
+                                <View
+                                    style={[
+                                        styles.paginationDot,
+                                        { width: activeIndex === index ? 20 : 8 }
+                                    ]}
+                                />
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </View>
+                <View style={styles.box}>
+                    <View>
+                        <Text h2 style={styles.title}>{currProperty.name}</Text>
+                        <View style={styles.flexRow}>
+                            <FontAwesome name="map-marker" size={20} color={colors.primary.normal} />
+                            <Text style={{ color: colors.base.dark, width: "90%" }}>{currProperty.address}</Text>
                         </View>
-                    ))}
+                    </View>
+                    <View>
+                        <Text h2 style={styles.title}>Features:</Text>
+                        <View style={styles.flexRow}>
+                            {amenitiesArray.map(([key, value]) => (
+                                <View key={key} style={styles.flexCol}>
+                                    <Avatar
+                                        size="medium"
+                                        rounded
+                                        source={{ uri: "https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-house-icon-png-image_695369.jpg" }}
+                                        containerStyle={styles.avatar}
+                                    />
+                                    <Text style={styles.amenityText}>{value} {key}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                </View>
+
+                <View style={styles.box}>
+                    <Text h2 style={styles.title}>Details:</Text>
+                    <Text style={{ color: colors.primary.normal }}>{currProperty.description}</Text>
+                </View>
+
+                <View style={styles.priceBox}>
+                    <Text style={styles.priceText}>${currProperty.price.toLocaleString()}</Text>
+                    <Button
+                        title="Message"
+                        buttonStyle={basicTheme.components.GreenBtn.buttonStyle}
+                        titleStyle={basicTheme.components.GreenBtn.titleStyle}
+                        disabledStyle={basicTheme.components.GreenBtn.disabledStyle}
+                        icon={basicTheme.components.GreenBtn.icon}
+                        type={basicTheme.components.GreenBtn.type}
+                    />
                 </View>
             </View>
-        </View>
-
-        <View style={styles.box}>
-            <Text h2 style={styles.title}>Details:</Text>
-            <Text style={{color:colors.primary.normal}}>{currProperty.description}</Text>
-        </View>
-
-        <View style={styles.priceBox}>
-            <Text style={styles.priceText}>${currProperty.price.toLocaleString()}</Text>
-            <Button
-                title="Message"
-                buttonStyle={basicTheme.components.GreenBtn.buttonStyle}
-                titleStyle={basicTheme.components.GreenBtn.titleStyle}
-                disabledStyle={basicTheme.components.GreenBtn.disabledStyle}
-                icon={basicTheme.components.GreenBtn.icon}
-                type={basicTheme.components.GreenBtn.type}
-            />
-        </View>
-    </View>
-  );
+        </ScrollView>
+    );
 };
 
 const styles = StyleSheet.create({
-    container:{
-        flex:1,
-        flexDirection:"column",
-        justifyContent:"space-between",
-        alignItems:"center",
-        padding:10
+    scrollViewContainer: {
+        flexGrow: 1,
+        alignItems: 'center', // Center content horizontally if needed
     },
-    flexCol:{
-        flexDirection:"column",
-        justifyContent:"space-between",
-        alignItems:"center"
+    container: {
+        flex: 1,
+        flexDirection: "column",
+        justifyContent: "flex-start", // Changed from 'space-between' to 'flex-start'
+        alignItems: "center",
+        paddingVertical: 10,
+        rowGap: 15,
+        width: '100%', // Ensure container takes full width
     },
-    flexRow:{
-        flexDirection:"row",
-        justifyContent:"space-between",
-        alignItems:"center",
-        width:"100%"
+    flexCol: {
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "center"
     },
-    amenityText:{
-        fontFamily:"Quicksand_700Bold",
-        color:colors.primary.normal,
-        textTransform:"capitalize"
+    flexRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%"
     },
-    title:{
-        width:"100%", 
-        textAlign:"left"
+    amenityText: {
+        fontFamily: "Quicksand_700Bold",
+        color: colors.primary.normal,
+        textTransform: "capitalize"
     },
-    box:{
-        flexDirection:"column",
-        justifyContent:"space-between",
-        alignItems:"flex-start",
-        backgroundColor:"white",
+    title: {
+        width: "100%",
+        textAlign: "left"
+    },
+    box: {
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        backgroundColor: "white",
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.4,
         shadowRadius: 4,
-        padding:2,
-        width:"100%"
+        padding: 3,
+        width: "90%",
+        rowGap: 10
     },
-    priceBox:{
-        flexDirection:"row",
-        justifyContent:"space-between",
-        alignItems:"center",
-        backgroundColor:"white",
+    priceBox: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        backgroundColor: "white",
         borderRadius: 10,
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.4,
         shadowRadius: 4,
-        padding:2,
-        width:"100%",
-        rowGap:10
+        padding: 2,
+        width: "90%",
+        rowGap: 10
     },
-    priceText:{
-        fontWeight:"bold",
-        fontFamily:"Poppins_700Bold",
-        color:colors.primary.normal,
-        fontSize:24
+    priceText: {
+        fontWeight: "bold",
+        fontFamily: "Poppins_700Bold",
+        color: colors.primary.normal,
+        fontSize: 24
     },
-    priceBtn:{
-        backgroundColor:colors.primary.normal,
-        color:"white",
-        borderRadius:16,
-    }
+    itemContainer: {
+        width: width * 0.95,
+        height: 200,
+        borderRadius: 10,
+        overflow: 'hidden',
+    },
+    imageBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        borderRadius: 10,
+    },
+    paginationContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    paginationDot: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: 'gray',
+        margin: 2,
+    },
 });
 
 export default DetailComponent;

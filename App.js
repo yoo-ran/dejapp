@@ -65,7 +65,17 @@ function TabNavigator({navigation}) {
       <Tab.Screen
         name="Detail"
         component={Detail}
-        options={{ headerShown: false }}      
+        options={{
+          title: 'Detail',
+          headerRight: () => (
+            <Icon
+              style={{ color: '#003443' }}
+              name='heart'
+              type='ionicon'
+              onPress={() => navigationRef.navigate('Like')}
+            />
+          ),
+        }}  
       />
     </Tab.Navigator>
   );

@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@rneui/themed';
 import DetailComponent from '../components/DetailComponent';
 
 
-export default function Detail({  navigation }) {
+export default function Detail({route, navigation }) {
   // get the params from the route
-//   const { detailId } = route.params;
+  const { detailId } = route.params || {};
 
   // add the three useState for the fetch process
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [dataResult, setDataResult] = useState([]);
 
-  // add useEffect for the fetch process
   useEffect(() => {
-    axios.get('https://dejapi-8cfa29bb41d9.herokuapp.com/api/items/2')
-      .then(
-        (result) => {
-          setIsLoaded(true);
-          setDataResult(result.data);
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        (error) => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      )
-  }, []);
-
+    if (detailId) {
+      axios.get(`https://dejapi-8cfa29bb41d9.herokuapp.com/api/items/${detailId}`)
+        .then(
+          (result) => {
+            setIsLoaded(true);
+            setDataResult(result.data);
+          },
+          (error) => {
+            setIsLoaded(true);
+            setError(error);
+          }
+        );
+    } else {
+      // Handle case where detailId is not provided
+      setIsLoaded(true);
+      setError(new Error('Detail ID is missing'));
+    }
+  }, [detailId]);
 
   return (
     <View style={styles.container}>

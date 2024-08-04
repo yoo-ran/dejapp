@@ -5,14 +5,15 @@ import { colors } from '../themes/Theme';
 
 const CardItem = ({ properties, navigatorRef }) => {
   return (
-    <View style={styles.card}
-        onPress={() => navigatorRef.navigate('Detail', {
-          detailId: properties.id})}
-      >
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigatorRef.navigate('Detail', { detailId: properties.id })}
+    >
       <View style={styles.imageContainer}>
         <Image 
-          source={{ uri: properties.img }} // Placeholder image
+          source={{ uri: properties.img }} 
           style={styles.image}
+          resizeMode="cover" 
         />
         <TouchableOpacity style={styles.heartIcon}>
           <FontAwesome name="heart-o" size={24} color={colors.primary.normal} />
@@ -42,7 +43,7 @@ const CardItem = ({ properties, navigatorRef }) => {
           </View>
         </View>
       </View>
-    </View>
+      </TouchableOpacity>
   );
 };
 
@@ -64,6 +65,8 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     position: 'relative',
+    width:"100%",
+    height:150,
   },
   image: {
     width: '100%',
@@ -74,7 +77,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 10,
     left: 10,
-
   },
   priceTag: {
     position: 'absolute',

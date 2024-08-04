@@ -23,7 +23,7 @@ export default function Home({ navigation }) {
         setFilteredData(response.data);
         setIsLoaded(true);
 
-        const saleItems = response.data.filter(item => item.sale === true);
+        const saleItems = response.data.filter(item => item.onsale === true);
         if (saleItems.length > 0) {
           setSaleData(saleItems);
         } else {
@@ -53,8 +53,14 @@ export default function Home({ navigation }) {
   const filterBtn = [
     { type: "Houses", icon: "home-outline" },
     { type: "Apartment", icon: "business-outline" },
-    { type: "Office", icon: "laptop-outline" },
+    { type: "Villa", icon: "laptop-outline" },
   ];
+
+  const filterPress = (e) => {
+    let filterText = e.target
+    let filtered = data.filter(item => item.title.toLowerCase().includes(text.toLowerCase()));
+
+  }
 
   const filterItem = ({ item }) => (
     <CardItem properties={item} navigatorRef={navigation} />
@@ -156,7 +162,7 @@ export default function Home({ navigation }) {
             <Text>See All</Text>
           </View>
           <View style={styles.flexCol}>
-            {recommendItem ? <CardItem properties={recommendItem} /> : <p>Loading...</p>}
+            {recommendItem ? <CardItem properties={recommendItem} navigatorRef={navigation} /> : <p>Loading...</p>}
           </View>
         </View>
 
@@ -173,7 +179,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical:20,
-    rowGap:25
+    rowGap:30
   },
   input: {
     height: 40,
@@ -186,7 +192,6 @@ const styles = StyleSheet.create({
     color:"#00495F"
   },
   flexRow: {
-    flex: 1,
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: "center",
