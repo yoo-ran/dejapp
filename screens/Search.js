@@ -9,7 +9,7 @@ import SearchInput from '../components/searchPage/SearchInput'; // Adjust the im
 import SearchResult from '../components/searchPage/SearchResult'; // Adjust the import path as necessary
 import SearchCity from '../components/searchPage/SearchCity';
 
-const Search = () => {
+const Search = ({navigation}) => {
   const [query, setQuery] = useState('');
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -55,7 +55,7 @@ const Search = () => {
 
   const displaySearch = () =>{
     if(query.length > 0 || selectedCity !== null) {
-      return <SearchResult results={filteredData} />
+      return <SearchResult results={filteredData} navigationRef={navigation}/>
     }else{
       return <SearchCity onCityPress={handleCityPress} />
     }
@@ -84,6 +84,7 @@ const Search = () => {
       <View>
         <SearchInput query={query} onChange={handleSearch} />
       </View>
+
         {displaySearch()}
     </View>
   );

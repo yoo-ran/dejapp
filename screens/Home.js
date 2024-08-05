@@ -67,7 +67,7 @@ export default function Home({ navigation }) {
   );
 
   const saleItem = ({ item }) => (
-    <SaleCardItem properties={item} navigatorRef={navigation} />
+    <SaleCardItem properties={item} navigatorRef={navigation} isLike={false} />
   );
 
   const displayDataContainer = (error, isLoaded, displayData, navigation, renderItem) => {

@@ -43,9 +43,9 @@ const DetailComponent = ({ currProperty }) => {
                         ref={carouselRef}
                         data={currProperty.carousel}
                         renderItem={renderItem}
-                        itemWidth={width * 0.9}
-                        containerWidth={width * 0.9}
-                        separatorWidth={10}
+                        itemWidth={width * 1}
+                        containerWidth={width * 1}
+                        separatorWidth={5}
                         pagingEnabled={true}
                         onScrollEnd={handleScrollEnd}
                     />
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     itemContainer: {
-        width: width * 0.95,
+        width: width * 1,
         height: 200,
         borderRadius: 10,
         overflow: 'hidden',

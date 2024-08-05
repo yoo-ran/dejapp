@@ -3,6 +3,8 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Assuming you are using expo
 import { colors } from '../themes/Theme';
 
+import FavoriteBtn from './saveItem/FavoriteBtn';
+
 const CardItem = ({ properties, navigatorRef }) => {
   return (
     <TouchableOpacity
@@ -16,7 +18,7 @@ const CardItem = ({ properties, navigatorRef }) => {
           resizeMode="cover" 
         />
         <TouchableOpacity style={styles.heartIcon}>
-          <FontAwesome name="heart-o" size={24} color={colors.primary.normal} />
+          <FavoriteBtn property={properties}/>
         </TouchableOpacity>
         <View style={styles.priceTag}>
           <Text style={styles.priceText}>${properties.price.toLocaleString()}</Text>

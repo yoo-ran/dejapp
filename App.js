@@ -1,11 +1,14 @@
+// App.js
+import React from 'react';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'; // Import the stack navigator
-import { navigationRef } from './services/RootNavigation';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigationRef } from './services/RootNavigation'; // Import your navigation reference
 import { ThemeProvider, Icon } from '@rneui/themed';
 import { basicTheme } from './themes/basicThemes';
+import { SavedItemsProvider } from './components/saveItem/SavedItemsContext';
 
 import { useFonts } from 'expo-font';
 import { Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
@@ -18,11 +21,12 @@ import Search from './screens/Search';
 import Onboarding from './screens/Onboarding';
 import Detail from './screens/Detail';
 import Like from './screens/Like';
+import SearchResult from './components/searchPage/SearchResult';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function TabNavigator({navigation}) {
+function TabNavigator({ navigation }) {
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -52,8 +56,8 @@ function TabNavigator({navigation}) {
 
           return <Icon name={iconName} type='ionicon' color={iconColor} size={size} />;
         },
-        tabBarActiveTintColor: '#00495F',  // Active tab label color
-        tabBarInactiveTintColor: '#8e8e8e', // Inactive tab label color
+        tabBarActiveTintColor: '#00495F',
+        tabBarInactiveTintColor: '#8e8e8e',
       })}
     >
       <Tab.Screen
@@ -64,7 +68,7 @@ function TabNavigator({navigation}) {
       <Tab.Screen
         name="Search"
         component={Search}
-        options={{ headerShown: false }}      
+        options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Detail"
@@ -73,33 +77,31 @@ function TabNavigator({navigation}) {
           title: 'Detail',
           headerRight: () => (
             <Icon
-              style={{ color: '#003443' }}
+              style={{ color: '#003443', marginRight: 5 }}
               name='heart'
               type='ionicon'
-              onPress={() => navigationRef.navigate('Like')}
+              onPress={() => navigate('Like')}
             />
           ),
-        }}  
+        }}
       />
       <Tab.Screen
         name="Like"
         component={Like}
-        options={{ headerShown: false }}      
+        options={{ headerShown: false }}
       />
     </Tab.Navigator>
   );
 }
 
 export default function App() {
-  // the hook that loads the font  
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_700Bold,
-    Quicksand_400Regular, 
+    Quicksand_400Regular,
     Quicksand_700Bold
   });
 
-  // conditional to show a spinner while the font is loading
   if (!fontsLoaded) {
     return (
       <View style={styles.loadingContainer}>
@@ -110,22 +112,34 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer ref={navigationRef}>
-        <ThemeProvider theme={basicTheme}>
-          <Stack.Navigator initialRouteName="Onboarding">
-            <Stack.Screen
-              name="Onboarding"
-              component={Onboarding}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Main"
-              component={TabNavigator}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </ThemeProvider>
-      </NavigationContainer>
+      <SavedItemsProvider>
+        <NavigationContainer ref={navigationRef}>
+          <ThemeProvider theme={basicTheme}>
+            <Stack.Navigator initialRouteName="Onboarding">
+              <Stack.Screen
+                name="Onboarding"
+                component={Onboarding}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Main"
+                component={TabNavigator}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="SearchResult"
+                component={SearchResult}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Detail"
+                component={Detail}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </ThemeProvider>
+        </NavigationContainer>
+      </SavedItemsProvider>
     </SafeAreaProvider>
   );
 }

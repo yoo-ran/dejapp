@@ -3,7 +3,8 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Assuming you are using expo
 import { colors } from '../themes/Theme';
 
-const SaleCardItem = ({ properties, navigatorRef }) => {
+const SaleCardItem = ({ properties, navigatorRef, isLike, onDelete }) => {
+  console.log("salecardItem", properties);
   return (
     <TouchableOpacity
       style={styles.card}
@@ -26,20 +27,29 @@ const SaleCardItem = ({ properties, navigatorRef }) => {
         <View style={styles.subInfoContainer}>
           <View style={styles.iconText}>
             <FontAwesome name="bath" size={20} color={colors.primary.normal} />
-            <Text style={styles.subInfoText}>{properties.amenity.bathroom}</Text>
+            {/* <Text style={styles.subInfoText}>{properties.amenity.bathroom}</Text> */}
           </View>
           <View style={styles.iconText}>
             <FontAwesome name="bed" size={20} color={colors.primary.normal} />
-            <Text style={styles.subInfoText}>{properties.amenity.bedroom}</Text>
+            {/* <Text style={styles.subInfoText}>{properties.amenity.bedroom}</Text> */}
           </View>
           <View style={styles.iconText}>
             <FontAwesome name="square" size={20} color={colors.primary.normal} />
-            <Text style={styles.subInfoText}>{properties.amenity.sqft}ft</Text>
+            {/* <Text style={styles.subInfoText}>{properties.amenity.sqft}ft</Text> */}
           </View>
-        </View>
-      
+        </View>      
       </View>
 
+      {
+        isLike && (
+          <TouchableOpacity
+            style={styles.xBtn}
+            onPress={() => onDelete(properties.id)}
+          >
+            <Text style={{color:colors.base.normal}}>X</Text>
+          </TouchableOpacity>
+        )
+      }
     </TouchableOpacity>
   );
 };
@@ -48,7 +58,7 @@ const styles = StyleSheet.create({
   card: {
     flex:1,
     flexDirection:"row",
-    width: "90%",
+    width: "100%",
     padding: 13.57,
     justifyContent:"space-between",
     alignItems: 'center',
@@ -61,7 +71,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   image: {
-    width: '36%',
+    width: '30%',
     height:"100%",
     borderRadius: 10,
     backgroundColor:"gray"
@@ -101,6 +111,15 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     color:colors.primary.normal
   },
+  xBtn:{
+    backgroundColor:colors.primary.normal,
+    borderRadius:6,
+    width: "8%",
+    height:"50%",
+    flexDirection:"row",
+    alignItems: 'center',
+    justifyContent:"center"
+  }
 });
 
 export default SaleCardItem;

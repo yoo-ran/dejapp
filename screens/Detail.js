@@ -32,7 +32,7 @@ export default function Detail({route, navigation }) {
     } else {
       // Handle case where detailId is not provided
       setIsLoaded(true);
-      setError(new Error('Detail ID is missing'));
+      setError(new Error('Not any Item has been selected:)'));
     }
   }, [detailId]);
 

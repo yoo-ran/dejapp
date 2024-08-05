@@ -1,11 +1,12 @@
+// SearchResult.js
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
-
 import CardItem from '../CardItem';
 
-const SearchResult = ({ results }) => {
+const SearchResult = ({ results, navigationRef }) => {
+
   const renderItem = ({ item }) => (
-    <CardItem properties={item} navigatorRef={navigation} />
+    <CardItem properties={item} navigationRef={navigationRef}/>
   );
 
   return (
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    rowGap:20
+    rowGap: 20
   }
 });
 
