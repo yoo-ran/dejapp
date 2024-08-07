@@ -3,6 +3,7 @@ import { View, StyleSheet, Dimensions, ImageBackground, TouchableOpacity, Scroll
 import { Button, Text } from "@rneui/themed";
 import { Avatar } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons'; 
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { colors } from '../themes/Theme';
 import { basicTheme } from '../themes/basicThemes';
 import Carousel from 'react-native-anchor-carousel';
@@ -11,6 +12,13 @@ const { width } = Dimensions.get('window');
 
 const DetailComponent = ({ currProperty }) => {
     const amenitiesArray = Object.entries(currProperty.amenity);
+    const amenitiesICon = [
+
+        <FontAwesome name="bed" size={24} color={colors.primary.normal} />,
+        <FontAwesome name="bath" size={24} color={colors.primary.normal} />,
+        <FontAwesome name="square" size={24} color={colors.primary.normal} />,
+        <FontAwesome5 name="parking" size={24} color={colors.primary.normal} />,
+    ]
     const [activeIndex, setActiveIndex] = useState(0);
     const carouselRef = useRef(null);
 
@@ -73,15 +81,12 @@ const DetailComponent = ({ currProperty }) => {
                     <View>
                         <Text h2 style={styles.title}>Features:</Text>
                         <View style={styles.flexRow}>
-                            {amenitiesArray.map(([key, value]) => (
+                            {amenitiesArray.map(([key, value], index) => (
                                 <View key={key} style={styles.flexCol}>
-                                    <Avatar
-                                        size="medium"
-                                        rounded
-                                        source={{ uri: "https://png.pngtree.com/png-vector/20190223/ourmid/pngtree-vector-house-icon-png-image_695369.jpg" }}
-                                        containerStyle={styles.avatar}
-                                    />
-                                    <Text style={styles.amenityText}>{value} {key}</Text>
+                                    <View style={styles.iconContainer}>
+                                        {amenitiesICon[index]}
+                                        <Text style={styles.amenityText}>{value} {key}</Text>
+                                    </View>
                                 </View>
                             ))}
                         </View>
@@ -204,6 +209,12 @@ const styles = StyleSheet.create({
         backgroundColor: 'gray',
         margin: 2,
     },
+    iconContainer:{
+        flexDirection:"column",
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign:"center"
+    }
 });
 
 export default DetailComponent;

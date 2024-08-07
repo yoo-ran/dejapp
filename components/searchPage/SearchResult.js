@@ -1,12 +1,10 @@
-// SearchResult.js
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import CardItem from '../CardItem';
 
-const SearchResult = ({ results, navigationRef }) => {
-
+const SearchResult = ({ results, navigation }) => {
   const renderItem = ({ item }) => (
-    <CardItem properties={item} navigationRef={navigationRef}/>
+    <CardItem properties={item} navigation={navigation} />
   );
 
   return (

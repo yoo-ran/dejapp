@@ -4,12 +4,13 @@ import { FontAwesome } from '@expo/vector-icons'; // Assuming you are using expo
 import { colors } from '../themes/Theme';
 
 import FavoriteBtn from './saveItem/FavoriteBtn';
+import { navigationRef } from '../services/RootNavigation';
 
-const CardItem = ({ properties, navigatorRef }) => {
+const CardItem = ({ properties, navigatorRef, navigation }) => {
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigatorRef.navigate('Detail', { detailId: properties.id })}
+      onPress={() => {navigatorRef!==null ? navigationRef.navigate('Detail', { detailId: properties.id }): navigation.navigate('Detail', { detailId: properties.id })}}
     >
       <View style={styles.imageContainer}>
         <Image 
