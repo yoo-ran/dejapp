@@ -7,6 +7,7 @@ import SaleCardItem from '../components/SaleCardItem';
 const Like = ({ navigation }) => {
   const { savedItems, setSavedItems } = useSavedItems();
 
+  // Retrieves the saved items from AsyncStorage when the component mounts.
   const fetchItems = async () => {
     try {
       const existingItems = await AsyncStorage.getItem('items');
@@ -18,24 +19,32 @@ const Like = ({ navigation }) => {
     }
   };
 
+  // Calls fetchItems when the component mounts (empty dependency array [] ensures it runs once).
   useEffect(() => {
     fetchItems();
   }, []);
 
+  // Removes an item with a specific itemId from AsyncStorage and updates the state.
   const deleteItem = async (itemId) => {
     try {
+      // Retrieves the saved items from AsyncStorage. AsyncStorage.getItem
       const existingItems = await AsyncStorage.getItem('items');
       if (existingItems) {
+        // Converts the stringified JSON data into a JavaScript array using JSON.parse.
         const itemsArray = JSON.parse(existingItems);
+        // Creates a new array updatedItems that excludes the item with the specified itemId.
         const updatedItems = itemsArray.filter(item => item.id !== itemId);
+        // Stores the updated array of items back into AsyncStorage. 
         await AsyncStorage.setItem('items', JSON.stringify(updatedItems));
-        setSavedItems(updatedItems); // Update context state
+        // Updates the component’s state with the new array of items.
+        setSavedItems(updatedItems); 
       }
     } catch (error) {
       Alert.alert('Error deleting item');
     }
   };
 
+  // Renders each item using SaleCardItem, passing the item data, navigation, a flag (isLike), and the deleteItem function.
   const renderItem = ({ item }) => (
     <SaleCardItem properties={item} navigatorRef={navigation} isLike={true} onDelete={deleteItem} />
   );

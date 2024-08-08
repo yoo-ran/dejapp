@@ -14,7 +14,6 @@ import { useFonts } from 'expo-font';
 import { Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import { Quicksand_400Regular, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
 
-import './fonts.css';
 
 import Home from './screens/Home';
 import Search from './screens/Search';

@@ -16,6 +16,9 @@ export default function Detail({route, navigation }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [dataResult, setDataResult] = useState([]);
 
+
+  // This hook fetches data for a specific item based on detailId and handles loading and error states.
+  // The hook depends on detailId, meaning it will re-run whenever detailId changes.
   useEffect(() => {
     if (detailId) {
       axios.get(`https://dejapi-8cfa29bb41d9.herokuapp.com/api/items/${detailId}`)
@@ -23,6 +26,7 @@ export default function Detail({route, navigation }) {
           (result) => {
             setIsLoaded(true);
             setDataResult(result.data);
+            // Sets the loading state to true and updates the state with the fetched data (result.data).
           },
           (error) => {
             setIsLoaded(true);
@@ -38,6 +42,8 @@ export default function Detail({route, navigation }) {
 
   return (
     <View style={styles.container}>
+      {/* Renders the UI based on the current states (error, isLoaded, dataResult, and navigation).
+displayData Function: Called with the current states to decide what to display. */}
       {displayData(error, isLoaded, dataResult, navigation)}
     </View>
   );
@@ -69,6 +75,7 @@ function displayData(error, isLoaded, dataResult, ) {
   }
   else {
     return (
+        // Renders the DetailComponent with the fetched data (dataResult) and navigation functionality.
         <DetailComponent currProperty={dataResult} navigatorRef={navigation} />
     );
   }
