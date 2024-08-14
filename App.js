@@ -1,11 +1,10 @@
-// App.js
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { navigationRef } from './services/RootNavigation'; // Import your navigation reference
+import { navigationRef } from './services/RootNavigation';
 import { ThemeProvider, Icon } from '@rneui/themed';
 import { basicTheme } from './themes/basicThemes';
 import { SavedItemsProvider } from './components/saveItem/SavedItemsContext';
@@ -14,13 +13,13 @@ import { useFonts } from 'expo-font';
 import { Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import { Quicksand_400Regular, Quicksand_700Bold } from '@expo-google-fonts/quicksand';
 
-
 import Home from './screens/Home';
 import Search from './screens/Search';
 import Onboarding from './screens/Onboarding';
 import Detail from './screens/Detail';
 import Like from './screens/Like';
 import SearchResult from './components/searchPage/SearchResult';
+import Splash from './screens/Splash';  // Import the Splash screen component
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -39,16 +38,16 @@ function TabNavigator({ navigation }) {
 
           switch (route.name) {
             case 'Home':
-              iconName = 'home';  
+              iconName = 'home';
               break;
             case 'Search':
-              iconName = 'search';  
+              iconName = 'search';
               break;
             case 'Detail':
-              iconName = 'document-text-outline';  
+              iconName = 'document-text-outline';
               break;
             case 'Like':
-              iconName = 'heart'; 
+              iconName = 'heart';
               break;
           }
           const iconColor = focused ? '#00495F' : color;
@@ -98,15 +97,25 @@ export default function App() {
     Poppins_400Regular,
     Poppins_700Bold,
     Quicksand_400Regular,
-    Quicksand_700Bold
+    Quicksand_700Bold,
   });
+
+  const [isSplashVisible, setIsSplashVisible] = useState(true);
+
+  const handleSplashFinish = () => {
+    setIsSplashVisible(false);
+  };
 
   if (!fontsLoaded) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large' color='#00495F' />
+        <ActivityIndicator size="large" color="#00495F" />
       </View>
     );
+  }
+
+  if (isSplashVisible) {
+    return <Splash onFinish={handleSplashFinish} />;
   }
 
   return (

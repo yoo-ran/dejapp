@@ -28,7 +28,7 @@ const CardItem = ({ properties, navigation }) => {
         <Text style={styles.title}>{properties.name}</Text>
         <View style={styles.addressContainer}>
           <FontAwesome name="map-marker" size={20} color={colors.primary.normal} />
-          <Text style={styles.addressText}>3-seat sofa with chaise longue, Gunnared beige</Text>
+          <Text style={styles.addressText}>{properties.address}</Text>
         </View>
         <View style={styles.subInfoContainer}>
           <View style={styles.iconText}>
@@ -52,7 +52,7 @@ const CardItem = ({ properties, navigation }) => {
 const styles = StyleSheet.create({
   card: {
     display: 'flex',
-    width: 250, // Adjust the width for horizontal scrolling
+    width: 380, // Adjust the width for horizontal scrolling
     padding: 13.57,
     flexDirection: 'column',
     alignItems: 'flex-start',

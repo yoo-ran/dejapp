@@ -35,14 +35,14 @@ const FavoriteBtn = ({ property }) => {
       const itemsArray = existingItems ? JSON.parse(existingItems) : [];
 
       if (isLiked) {
-        // Remove item if it already exists
+        
         const updatedItems = itemsArray.filter(item => item.id !== property.id);
         await AsyncStorage.setItem('items', JSON.stringify(updatedItems));
         setSavedItems(updatedItems);
         setIsLiked(false);
         Alert.alert('Item removed!');
       } else {
-        // Add item if it does not exist
+       
         itemsArray.push(property);
         await AsyncStorage.setItem('items', JSON.stringify(itemsArray));
         setSavedItems(itemsArray);

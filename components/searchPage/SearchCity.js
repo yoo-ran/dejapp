@@ -12,7 +12,7 @@ const SearchCity = ({ onCityPress }) => {
             <ImageBackground 
             source={{ uri: item.img }} 
             style={styles.cityButtonBackground}
-            imageStyle={styles.cityButtonImage} // Apply borderRadius to the image
+            imageStyle={styles.cityButtonImage} 
             
             >
             <TouchableOpacity 

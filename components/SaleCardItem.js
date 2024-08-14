@@ -12,6 +12,7 @@ const SaleCardItem = ({ properties, navigation, isLike, onDelete }) => {
         <Image 
           source={{ uri: properties.img }} 
           resizeMode="cover" 
+          style={styles.image}
         />
 
       <View style={styles.infoContainer}>
@@ -19,7 +20,7 @@ const SaleCardItem = ({ properties, navigation, isLike, onDelete }) => {
         
         <View style={styles.addressContainer}>
           <FontAwesome name="map-marker" size={20} color={colors.primary.normal} />
-          <Text style={styles.addressText}>3-seat sofa with chaise longue, Gunnared beige</Text>
+          <Text style={styles.addressText}>{properties.address}</Text>
         </View>
         
         <View style={styles.subInfoContainer}>
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   card: {
     flex:1,
     flexDirection:"row",
-    width: "100%",
+    width: 380,
     padding: 13.57,
     justifyContent:"space-between",
     alignItems: 'center',
@@ -74,7 +75,6 @@ const styles = StyleSheet.create({
     width: '30%',
     height:"100%",
     borderRadius: 10,
-    backgroundColor:"gray"
   },
   priceText: {
     color: 'white',

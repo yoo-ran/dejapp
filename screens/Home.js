@@ -1,130 +1,115 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, TextInput, FlatList, ScrollView } from 'react-native';
 import { Button, Text } from '@rneui/themed';
-import axios from 'axios'; // If you prefer using Axios
+import axios from 'axios'; // Import Axios for making HTTP requests
 
-import CardItem from '../components/CardItem';
-import SaleCardItem from '../components/SaleCardItem';
+import CardItem from '../components/CardItem'; // Import CardItem component for displaying regular items
+import SaleCardItem from '../components/SaleCardItem'; // Import SaleCardItem component for displaying sale items
 
 export default function Home({ navigation }) {
-  const [search, setSearch] = useState('');
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [saleData, setSaleData] = useState ([])
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [recommendItem, setRecommendItem] = useState(null);
-  const [isClicked, setIsClicked] = useState(false)
-
+  // State hooks for managing component state
+  const [search, setSearch] = useState(''); // Search query
+  const [data, setData] = useState([]); // Holds all fetched data
+  const [filteredData, setFilteredData] = useState([]); // Holds data filtered by search query
+  const [saleData, setSaleData] = useState([]); // Holds data for items on sale
+  const [error, setError] = useState(null); // Holds error if fetching fails
+  const [isLoaded, setIsLoaded] = useState(false); // Indicates if data is loaded
+  const [recommendItem, setRecommendItem] = useState(null); // Holds a randomly recommended item
+  const [isClicked, setIsClicked] = useState(false); // State for handling button clicks
 
   useEffect(() => {
-    // makes a GET request to the specified API endpoint to fetch items data.
-    // a promise-based HTTP client for the browser and Node.js.
+    // Fetch data from the API when the component mounts
     axios.get('https://dejapi-8cfa29bb41d9.herokuapp.com/api/items')
       .then(response => {
+        // Update state with fetched data
         setData(response.data);
         setFilteredData(response.data);
         setIsLoaded(true);
 
+        // Filter sale items and update state
         const saleItems = response.data.filter(item => item.onsale === true);
-      
-        if (saleItems.length > 0) {
-          setSaleData(saleItems);
-        } else {
-          setSaleData(response.data);
-        }
+        setSaleData(saleItems.length > 0 ? saleItems : response.data);
 
+        // Select a random item for recommendation
         const getRandomItem = () => {
           const randomIndex = Math.floor(Math.random() * response.data.length);
           return response.data[randomIndex];
         };
-        // Set a random item on component mount
         setRecommendItem(getRandomItem());
       })
-
-      // This block runs if the request fails.
       .catch(error => {
-        // Sets the loading state to true, even if there is an error, to stop any loading indicators.
-        setIsLoaded(true);
-        // setError(error): Sets the error state with the encountered error.
+        // Handle errors
+        setIsLoaded(false);
         setError(error);
       });
-      // With the empty dependency array [], this effect runs only once when the component mounts
   }, []);
 
+  // Handle search input changes
   const handleSearch = (text) => {
     setSearch(text);
+    // Filter data based on search query
     const filtered = data.filter(item => item.title.toLowerCase().includes(text.toLowerCase()));
     setFilteredData(filtered);
   };
 
+  // Define filter button data
   const filterBtn = [
     { type: "House", icon: "home-outline" },
     { type: "Apartment", icon: "business-outline" },
     { type: "Villa", icon: "laptop-outline" },
   ];
 
+  // Handle filter button press
   const filterPress = (type) => {
+    // Filter data based on selected type
     let filtered = data.filter(item => item.category.toLowerCase().includes(type.toLowerCase()));
-    // Converts the category property of the item to lowercase to make the comparison case-insensitive.
-    // Checks if the lowercase category includes the lowercase type. If it does, the item is included in the filtered array.
     setFilteredData(filtered);
-    // Updates the state filteredData with the filtered results from the data array. This will typically cause a re-render of the component to display the filtered items.
-    setIsClicked(type); 
-    // Updates the state isClicked with the type that was passed to filterPress. 
-    // This is used to keep track of which filter button was clicked, possibly for styling or other logic.
-  }
+    setIsClicked(type); // Update button click state
+  };
 
+  // Render each item in the filtered data list
   const filterItem = ({ item }) => (
     <CardItem properties={item} navigation={navigation} />
   );
 
-  // This function defines how each item in the sale list should be rendered.
+  // Render each item in the sale list
   const saleItem = ({ item }) => (
     <SaleCardItem properties={item} navigation={navigation} isLike={false} />
   );
 
-
-
-  // This function manages the display of data based on the current state of the component.
+  // Display data based on the current state
   const displayDataContainer = (error, isLoaded, displayData, renderItem) => {
-    // Error State:
-    // Displays an error message if there was a problem fetching the data.
     if (error) {
+      // Display error message
       return (
         <View style={styles.messageContainer}>
           <Text>Error: {error.message}</Text>
         </View>
       );
-
-    // Loading State:
-    // Displays a loading message while data is being fetched.
     } else if (!isLoaded) {
+      // Display loading message
       return (
         <View style={styles.messageContainer}>
           <Text>Loading...</Text>
         </View>
       );
-    // No Results State:
-    // Displays a message when no results are found in the filteredData.
     } else if (!displayData.length) {
+      // Display no results message
       return (
         <View style={styles.messageContainer}>
           <Text>No results found</Text>
         </View>
       );
-    // Displaying Data:
-    // Uses FlatList to render a scrollable list of items:
     } else {
+      // Display filtered or sale items
       return (
-          <FlatList
-            data={displayData}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={true}  
-          />
-
+        <FlatList
+          data={displayData}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={true}
+        />
       );
     }
   };
@@ -133,7 +118,7 @@ export default function Home({ navigation }) {
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
 
-        {/* Find Places Near You */}
+        {/* Find Places Near You Section */}
         <View style={styles.flexCol}>
           <Text h2>Find Places Near You</Text>
           <TextInput
@@ -144,7 +129,7 @@ export default function Home({ navigation }) {
           />
         </View>
 
-        {/* Search by Category */}
+        {/* Search by Category Section */}
         <View style={styles.flexCol}>
           <View style={styles.flexRow}>
             <Text h2>Search by Category:</Text>
@@ -153,26 +138,24 @@ export default function Home({ navigation }) {
 
           <View style={styles.flexRow}>
             {filterBtn.map((btn, index) => (
-              //  the map method to iterate over each element in the filterBtn array.
               <Button
-              key={index}
-              title={btn.type}
-              icon={{
-                name: btn.icon,
-                type: 'ionicon',
-                size: 15,
-                color: isClicked === btn.type ? 'white' : '#00495F' // Change color based on state
-              }}
-              iconPosition='left'
-              buttonStyle={{
-                backgroundColor: isClicked === btn.type ? '#00495F' : 'white',// Change color based on state
-              }}
-              titleStyle={{
-                color: isClicked === btn.type ? 'white' : '#00495F' // Change text color based on state
-              }}    
-              onPress={() => filterPress(btn.type)}
-              // Sets up a click handler for the button that calls the filterPress function with the button's type when clicked.
-            />
+                key={index}
+                title={btn.type}
+                icon={{
+                  name: btn.icon,
+                  type: 'ionicon',
+                  size: 15,
+                  color: isClicked === btn.type ? 'white' : '#00495F' // Change color based on state
+                }}
+                iconPosition='left'
+                buttonStyle={{
+                  backgroundColor: isClicked === btn.type ? '#00495F' : 'white', // Change background color based on state
+                }}
+                titleStyle={{
+                  color: isClicked === btn.type ? 'white' : '#00495F' // Change text color based on state
+                }}
+                onPress={() => filterPress(btn.type)}
+              />
             ))}
           </View>
           <View style={styles.flexRow}>
@@ -180,25 +163,25 @@ export default function Home({ navigation }) {
           </View>
         </View>
 
-        {/* On Sale: */}
+        {/* On Sale Section */}
         <View style={styles.flexCol}>
           <View style={styles.flexRow}>
             <Text h2>On Sale:</Text>
             <Text>See All</Text>
           </View>
-          <View style={styles.flexRow}>
+          <View>
             {displayDataContainer(error, isLoaded, saleData, saleItem)}
           </View>
         </View>
 
-        {/* Recommended for You */}
+        {/* Recommended for You Section */}
         <View style={styles.flexCol}>
           <View style={styles.flexRow}>
             <Text h2>Recommended for You</Text>
             <Text>See All</Text>
           </View>
           <View style={styles.flexCol}>
-            {recommendItem ? <CardItem properties={recommendItem} navigatorRef={navigation} /> : <Text>Loading...</Text>}
+            {recommendItem ? <CardItem properties={recommendItem} navigation={navigation} /> : <Text>Loading...</Text>}
           </View>
         </View>
 
@@ -246,13 +229,9 @@ const styles = StyleSheet.create({
     flex:1,
     paddingBottom: 20,
   },
-  scrollViewContent: {
-    // flexGrow: 1,
-  },
   messageContainer: {
     alignItems: 'center',
     justifyContent: 'center',
     height: 200,
   },
 });
-

@@ -1,64 +1,71 @@
 import React, { useEffect } from 'react';
 import { View, Text, FlatList, Alert, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useSavedItems } from '../components/saveItem/SavedItemsContext';
-import SaleCardItem from '../components/SaleCardItem';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Import AsyncStorage for local storage
+import { useSavedItems } from '../components/saveItem/SavedItemsContext'; // Import custom hook for managing saved items
+import SaleCardItem from '../components/SaleCardItem'; // Import SaleCardItem component for rendering items
 
 const Like = ({ navigation }) => {
+  // Access saved items and the function to update them from the context
   const { savedItems, setSavedItems } = useSavedItems();
 
-  // Retrieves the saved items from AsyncStorage when the component mounts.
+  // Function to retrieve saved items from AsyncStorage and update the state
   const fetchItems = async () => {
     try {
+      // Retrieve saved items from AsyncStorage
       const existingItems = await AsyncStorage.getItem('items');
       if (existingItems) {
+        // Parse the JSON string to an array and update state
         setSavedItems(JSON.parse(existingItems));
       }
     } catch (error) {
+      // Show an alert if there's an error fetching items
       Alert.alert('Error fetching items');
     }
   };
 
-  // Calls fetchItems when the component mounts (empty dependency array [] ensures it runs once).
+  // useEffect hook to call fetchItems when the component mounts
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, []); // Empty dependency array ensures this runs only once
 
-  // Removes an item with a specific itemId from AsyncStorage and updates the state.
+  // Function to delete an item by its ID
   const deleteItem = async (itemId) => {
     try {
-      // Retrieves the saved items from AsyncStorage. AsyncStorage.getItem
+      // Retrieve the current list of saved items
       const existingItems = await AsyncStorage.getItem('items');
       if (existingItems) {
-        // Converts the stringified JSON data into a JavaScript array using JSON.parse.
+        // Parse the string into an array
         const itemsArray = JSON.parse(existingItems);
-        // Creates a new array updatedItems that excludes the item with the specified itemId.
+        // Filter out the item with the specified ID
         const updatedItems = itemsArray.filter(item => item.id !== itemId);
-        // Stores the updated array of items back into AsyncStorage. 
+        // Save the updated items array back to AsyncStorage
         await AsyncStorage.setItem('items', JSON.stringify(updatedItems));
-        // Updates the component’s state with the new array of items.
+        // Update the component's state with the new list of items
         setSavedItems(updatedItems); 
       }
     } catch (error) {
+      // Show an alert if there's an error deleting the item
       Alert.alert('Error deleting item');
     }
   };
 
-  // Renders each item using SaleCardItem, passing the item data, navigation, a flag (isLike), and the deleteItem function.
+  // Render function for each item in the list
   const renderItem = ({ item }) => (
-    <SaleCardItem properties={item} navigatorRef={navigation} isLike={true} onDelete={deleteItem} />
+    // Render SaleCardItem with item properties, navigation, a flag, and delete function
+    <SaleCardItem properties={item} navigation={navigation} isLike={true} onDelete={deleteItem} />
   );
 
   return (
     <View style={styles.container}>
+      {/* Render FlatList if there are saved items, otherwise show a message */}
       {savedItems.length > 0 ? (
         <FlatList
           data={savedItems}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()} // Use index as key
+          renderItem={renderItem} // Render each item using renderItem function
         />
       ) : (
-        <Text style={styles.noItemsText}>No items found</Text>
+        <Text style={styles.noItemsText}>No items found</Text> // Message if no items are available
       )}
     </View>
   );
@@ -67,12 +74,15 @@ const Like = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    alignItems:"center",
+    justifyContent:"center",
+    paddingHorizontal: 16, // Padding around the content
+    paddingVertical:40
   },
   noItemsText: {
     textAlign: 'center',
     marginTop: 20,
-    fontSize: 16,
+    fontSize: 16, // Text style for the "No items found" message
   },
 });
 
