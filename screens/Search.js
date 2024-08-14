@@ -79,7 +79,7 @@ const Search = ({ navigation }) => {
       <View>
         <SearchInput query={query} onChange={handleSearch} />
       </View>
-      {displaySearch()}
+        {displaySearch()}
     </View>
   );
 };

@@ -21,21 +21,13 @@ export default function Home({ navigation }) {
     // makes a GET request to the specified API endpoint to fetch items data.
     // a promise-based HTTP client for the browser and Node.js.
     axios.get('https://dejapi-8cfa29bb41d9.herokuapp.com/api/items')
-    // This block runs when the request is successful.
       .then(response => {
-        // Updates the state data with the response data
         setData(response.data);
-        // Initializes filteredData with the same response data.
         setFilteredData(response.data);
-        // Sets the loading state to true, indicating that the data has been loaded.
         setIsLoaded(true);
 
         const saleItems = response.data.filter(item => item.onsale === true);
-        // This filters the response.data array to include only those items where the onsale property is true.
-        // saleItems will be an array containing only the items that are currently on sale.
-        
-        // If there are on-sale items, it sets the state to only those items. 
-        // If there are no on-sale items, it sets the state to all items from the response.
+      
         if (saleItems.length > 0) {
           setSaleData(saleItems);
         } else {
@@ -84,16 +76,18 @@ export default function Home({ navigation }) {
   }
 
   const filterItem = ({ item }) => (
-    <CardItem properties={item} navigatorRef={navigation} />
+    <CardItem properties={item} navigation={navigation} />
   );
 
   // This function defines how each item in the sale list should be rendered.
   const saleItem = ({ item }) => (
-    <SaleCardItem properties={item} navigatorRef={navigation} isLike={false} />
+    <SaleCardItem properties={item} navigation={navigation} isLike={false} />
   );
 
+
+
   // This function manages the display of data based on the current state of the component.
-  const displayDataContainer = (error, isLoaded, displayData, navigation, renderItem) => {
+  const displayDataContainer = (error, isLoaded, displayData, renderItem) => {
     // Error State:
     // Displays an error message if there was a problem fetching the data.
     if (error) {
@@ -113,7 +107,7 @@ export default function Home({ navigation }) {
       );
     // No Results State:
     // Displays a message when no results are found in the filteredData.
-    } else if (!filteredData.length) {
+    } else if (!displayData.length) {
       return (
         <View style={styles.messageContainer}>
           <Text>No results found</Text>
@@ -126,11 +120,11 @@ export default function Home({ navigation }) {
           <FlatList
             data={displayData}
             renderItem={renderItem}
-            keyExtractor={item => item.id}
-            style={styles.categoryList}
-            contentContainerStyle={styles.categoryListContent}
+            keyExtractor={(item) => item.id.toString()}
             horizontal
+            showsHorizontalScrollIndicator={true}  
           />
+
       );
     }
   };
@@ -156,6 +150,7 @@ export default function Home({ navigation }) {
             <Text h2>Search by Category:</Text>
             <Text>See All</Text>
           </View>
+
           <View style={styles.flexRow}>
             {filterBtn.map((btn, index) => (
               //  the map method to iterate over each element in the filterBtn array.
@@ -180,8 +175,8 @@ export default function Home({ navigation }) {
             />
             ))}
           </View>
-          <View style={styles.flexCol}>
-            {displayDataContainer(error, isLoaded, filteredData, navigation, filterItem)}
+          <View style={styles.flexRow}>
+            {displayDataContainer(error, isLoaded, filteredData, filterItem)}
           </View>
         </View>
 
@@ -192,9 +187,7 @@ export default function Home({ navigation }) {
             <Text>See All</Text>
           </View>
           <View style={styles.flexRow}>
-            {/* This renders the displayDataContainer function. */}
-            {/* saleItem: Render function for individual sale items. */}
-            {displayDataContainer(error, isLoaded, saleData, navigation, saleItem)}
+            {displayDataContainer(error, isLoaded, saleData, saleItem)}
           </View>
         </View>
 
@@ -205,7 +198,7 @@ export default function Home({ navigation }) {
             <Text>See All</Text>
           </View>
           <View style={styles.flexCol}>
-            {recommendItem ? <CardItem properties={recommendItem} navigatorRef={navigation} /> : <p>Loading...</p>}
+            {recommendItem ? <CardItem properties={recommendItem} navigatorRef={navigation} /> : <Text>Loading...</Text>}
           </View>
         </View>
 
@@ -238,7 +231,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: 'space-between',
     alignItems: "center",
-    width: "100%",
   },
   flexCol: {
     flexDirection: "column",
@@ -255,7 +247,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   scrollViewContent: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   messageContainer: {
     alignItems: 'center',

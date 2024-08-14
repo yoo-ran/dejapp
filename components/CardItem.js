@@ -4,13 +4,12 @@ import { FontAwesome } from '@expo/vector-icons'; // Assuming you are using expo
 import { colors } from '../themes/Theme';
 
 import FavoriteBtn from './saveItem/FavoriteBtn';
-import { navigationRef } from '../services/RootNavigation';
 
-const CardItem = ({ properties, navigatorRef, navigation }) => {
+const CardItem = ({ properties, navigation }) => {
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => {navigatorRef!==null ? navigationRef.navigate('Detail', { detailId: properties.id }): navigation.navigate('Detail', { detailId: properties.id })}}
+      onPress={() => navigation.navigate('Detail', { detailId: properties.id })}
     >
       <View style={styles.imageContainer}>
         <Image 
@@ -46,14 +45,14 @@ const CardItem = ({ properties, navigatorRef, navigation }) => {
           </View>
         </View>
       </View>
-      </TouchableOpacity>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
     display: 'flex',
-    width: "100%",
+    width: 250, // Adjust the width for horizontal scrolling
     padding: 13.57,
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -65,11 +64,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 4,
     elevation: 10,
+    marginBottom: 18,
+    marginRight: 10,
   },
   imageContainer: {
     position: 'relative',
-    width:"100%",
-    height:150,
+    width: '100%',
+    height: 150,
   },
   image: {
     width: '100%',
@@ -89,7 +90,7 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
-    backgroundColor:colors.primary.normal
+    backgroundColor: colors.primary.normal,
   },
   priceText: {
     color: 'white',
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    color:colors.primary.normal
+    color: colors.primary.normal,
   },
   addressContainer: {
     flexDirection: 'row',
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   },
   subInfoText: {
     marginLeft: 5,
-    color:colors.primary.normal
+    color: colors.primary.normal,
   },
 });
 

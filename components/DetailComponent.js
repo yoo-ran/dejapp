@@ -11,6 +11,8 @@ import Carousel from 'react-native-anchor-carousel';
 const { width } = Dimensions.get('window');
 
 const DetailComponent = ({ currProperty }) => {
+    console.log("detail component", currProperty);
+    
     const amenitiesArray = Object.entries(currProperty.amenity);
     const amenitiesICon = [
 

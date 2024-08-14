@@ -3,16 +3,14 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; // Assuming you are using expo
 import { colors } from '../themes/Theme';
 
-const SaleCardItem = ({ properties, navigatorRef, isLike, onDelete }) => {
-  console.log("salecardItem", properties);
+const SaleCardItem = ({ properties, navigation, isLike, onDelete }) => {
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigatorRef.navigate('Detail', { detailId: properties.id })}
+      onPress={() => navigation.navigate('Detail', { detailId: properties.id })}
     >
         <Image 
-          source={{ uri: properties.img }} // Placeholder image
-          style={styles.image}
+          source={{ uri: properties.img }} 
           resizeMode="cover" 
         />
 
@@ -65,10 +63,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 2, height: 2 },
+    shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.4,
     shadowRadius: 4,
-    elevation: 10,
+    elevation: 8,
+    marginBottom:10,
+    marginRight:10
   },
   image: {
     width: '30%',

@@ -11,14 +11,14 @@ export default function Detail({route, navigation }) {
   // get the params from the route
   const { detailId } = route.params || {};
 
-  // add the three useState for the fetch process
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [dataResult, setDataResult] = useState([]);
 
+console.log("detailId", detailId);
+console.log("detailjs", dataResult);
 
-  // This hook fetches data for a specific item based on detailId and handles loading and error states.
-  // The hook depends on detailId, meaning it will re-run whenever detailId changes.
+
   useEffect(() => {
     if (detailId) {
       axios.get(`https://dejapi-8cfa29bb41d9.herokuapp.com/api/items/${detailId}`)
@@ -26,7 +26,7 @@ export default function Detail({route, navigation }) {
           (result) => {
             setIsLoaded(true);
             setDataResult(result.data);
-            // Sets the loading state to true and updates the state with the fetched data (result.data).
+            
           },
           (error) => {
             setIsLoaded(true);
@@ -34,16 +34,13 @@ export default function Detail({route, navigation }) {
           }
         );
     } else {
-      // Handle case where detailId is not provided
       setIsLoaded(true);
       setError(new Error('Not any Item has been selected:)'));
     }
-  }, [detailId]);
+  },[]);
 
   return (
     <View style={styles.container}>
-      {/* Renders the UI based on the current states (error, isLoaded, dataResult, and navigation).
-displayData Function: Called with the current states to decide what to display. */}
       {displayData(error, isLoaded, dataResult, navigation)}
     </View>
   );
@@ -62,7 +59,6 @@ function displayData(error, isLoaded, dataResult, ) {
     return (
       <View>
         <Text>Loading...</Text>
-        {/* <ActivityIndicator size="large" color="#00ff00" /> */}
       </View>
     );
   }
@@ -76,7 +72,7 @@ function displayData(error, isLoaded, dataResult, ) {
   else {
     return (
         // Renders the DetailComponent with the fetched data (dataResult) and navigation functionality.
-        <DetailComponent currProperty={dataResult} navigatorRef={navigation} />
+        <DetailComponent currProperty={dataResult} />
     );
   }
 }
